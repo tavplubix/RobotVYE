@@ -12,7 +12,7 @@
 #include <QTimer>
 
 //#include <QxtSpanSlider>
-#include "IntervalSlider.h"
+#include "MyIntervalSlider.h"
 
 //OpenCV includes
 #include <opencv2/core/core.hpp>
@@ -37,8 +37,9 @@ private:
     QPixmap before, mask, after;
     QTimer timer;
     cv::VideoCapture capture;
-    IntervalSlider *slider;
+    MyIntervalSlider *rSlider, *gSlider, *bSlider;
 
+	void setupSlider(MyIntervalSlider* &slider);
     void processImage(cv::Mat cvimage/*const QString &filename*/);
     QPixmap cvMatToQImage(const cv::Mat& cvm);
 

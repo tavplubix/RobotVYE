@@ -11,6 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->centralWidget->setLayout(ui->gridLayout);
 
+	setupSlider(rSlider);
+	ui->gridLayout->addWidget(rSlider);
+
     connect(ui->chooseFilePushButton, &QPushButton::clicked, [&]() {
         QString filename = QFileDialog::getOpenFileName(this, "Image", "/home/tavplubix/ComputerVision");
         ui->filenameLineEdit->setText(filename);
@@ -53,19 +56,25 @@ MainWindow::MainWindow(QWidget *parent) :
     });
     timer.start();
 
-    slider = new IntervalSlider(this);
-    //slider->setSpan(0, 100);
-	slider->setMinimum(0);
-	slider->setValue(10);
-	slider->setMaximum(255);
-	slider->alt_setValue(20);
-    ui->gridLayout->addWidget(slider);
-    slider->show();
+
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setupSlider(MyIntervalSlider* &slider)
+{
+	slider = new MyIntervalSlider(this);
+	//slider->setSpan(0, 100);
+	slider->setMinimum(0);
+	slider->setMaximum(255);
+	slider->setMaximumWidth(300);
+	slider->setLowerValue(0);
+	slider->setUpperValue(255);
+	slider->show();
 }
 
 void MainWindow::processImage(cv::Mat cvimage/*const QString &filename*/)

@@ -59,6 +59,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_IntervalSlider.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="MyIntervalSlider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MyIntervalSlider.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MyIntervalSlider.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="test.qrc">
@@ -71,6 +80,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="IntervalSlider.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MyIntervalSlider.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
