@@ -183,11 +183,21 @@ void MyIntervalSlider::mouseReleaseEvent(QMouseEvent *mouseEvent)
 
 void MyIntervalSlider::setUpperValue(int value)
 {
+	int oldValue = upperValue();
 	options->setUpperValue(value);
+	if (value != oldValue) {
+		emit upperValueChanged(upperValue());
+		emit valueChanged(upperValue());
+	}
 }
 void MyIntervalSlider::setLowerValue(int value)
 {
+	int oldValue = lowerValue();
 	options->setLowerValue(value);
+	if (value != oldValue) {
+		emit lowerValueChanged(lowerValue());
+		emit valueChanged(lowerValue());
+	}
 }
 
 

@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QPalette>
 #include <QTimer>
+#include <QFormLayout>
 
 //#include <QxtSpanSlider>
 #include "MyIntervalSlider.h"
@@ -38,11 +39,15 @@ private:
     QTimer timer;
     cv::VideoCapture capture;
     MyIntervalSlider *rSlider, *gSlider, *bSlider;
+	QLabel *rlabel, *glabel, *blabel, *label;
 
 	void setupSlider(MyIntervalSlider* &slider);
+	void setupSliders();
+	void setupFormLayout(QFormLayout *layout);
+	void drawColorLabel(QLabel* pd, const QColor &lc, const QColor& uc);
     void processImage(cv::Mat cvimage/*const QString &filename*/);
     QPixmap cvMatToQImage(const cv::Mat& cvm);
-
+	QColor invert(const QColor& color);
 
 };
 
