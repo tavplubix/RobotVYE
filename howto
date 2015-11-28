@@ -1,0 +1,7 @@
+how to take a picture from Raspberry pie
+1. $ ssh pi@pi.local (pass: raspberry)
+2. $ raspistill -o <name>.jpg
+3. $ exit
+4. $ scp pi@pi.local:<name>.jpg /some/local/directory (pass: raspberry)
+
+How to use scp (in Russian): http://manual.ru/articles/Как_с_помощью_scp_скопировать_файл_или_директорию 
