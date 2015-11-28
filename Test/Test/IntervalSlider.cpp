@@ -1,6 +1,6 @@
 
 //Project
-#include "superslider.h"
+#include "IntervalSlider.h"
 
 //Qt
 #include <QMouseEvent>
@@ -27,7 +27,7 @@ public:
   }
 };
 
-SuperSlider::SuperSlider(QWidget *parent)
+IntervalSlider::IntervalSlider(QWidget *parent)
   : QSlider(parent)
 {
   //styling
@@ -47,7 +47,7 @@ SuperSlider::SuperSlider(QWidget *parent)
 
 }
 
-SuperSliderHandle::SuperSliderHandle(SuperSlider *_parent)
+SuperSliderHandle::SuperSliderHandle(IntervalSlider *_parent)
   : QLabel(_parent)
 {
   parent = _parent;
@@ -57,21 +57,21 @@ SuperSliderHandle::SuperSliderHandle(SuperSlider *_parent)
   setAcceptDrops(true);
   //hard coded path to image :/ sorry
   QPixmap pix = QPixmap(ImagesPath("handle.png"));
-  pix =  pix.scaled(25, 25, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+  //pix =  pix.scaled(40, 10, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
   setPixmap(pix);
 }
 
-int SuperSlider::alt_value()
+int IntervalSlider::alt_value()
 {
   return alt_handle->value();
 }
 
-void SuperSlider::alt_setValue(int value)
+void IntervalSlider::alt_setValue(int value)
 {
   alt_handle->setValue(value);
 }
 
-void SuperSlider::mouseReleaseEvent(QMouseEvent *mouseEvent)
+void IntervalSlider::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
   if (mouseEvent->button() == Qt::LeftButton)
   {
@@ -81,7 +81,7 @@ void SuperSlider::mouseReleaseEvent(QMouseEvent *mouseEvent)
   mouseEvent->accept();
 }
 
-void SuperSlider::alt_update()
+void IntervalSlider::alt_update()
 {
   QPoint posCursor(QCursor::pos());
   QPoint posParent(mapToParent(mapToGlobal(pos())));
@@ -134,7 +134,7 @@ int SuperSliderHandle::value()
   double range = parent->maximum() - parent->minimum();
   return parent->minimum() + (value * range);
 }
-void SuperSlider::Reset()
+void IntervalSlider::Reset()
 {
   int horBuffer = (alt_handle->width());
   QPoint myPos = mapToGlobal(pos());

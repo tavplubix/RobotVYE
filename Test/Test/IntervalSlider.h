@@ -16,12 +16,12 @@
 */
 class SuperSliderHandle;
 
-class SuperSlider: public QSlider
+class IntervalSlider: public QSlider
 {
   Q_OBJECT
 public:
   /** Constructor */
-  SuperSlider(QWidget *parent = 0);
+  IntervalSlider(QWidget *parent = 0);
 
   /** Store the alternate handle for this slider*/
   SuperSliderHandle *alt_handle;
@@ -49,7 +49,7 @@ class SliderEventFilter : public QObject
 {
 public:
   /** Constructor */
-  SliderEventFilter(SuperSlider *_grandParent)
+  SliderEventFilter(IntervalSlider *_grandParent)
   {grandParent = _grandParent;}
 
 protected:
@@ -60,7 +60,7 @@ protected:
 
 private:
   /** Store the SuperSlider that this event filter is used within. */
-  SuperSlider *grandParent;
+  IntervalSlider *grandParent;
 };
 
 class SuperSliderHandle: public QLabel
@@ -68,7 +68,7 @@ class SuperSliderHandle: public QLabel
   Q_OBJECT
 public:
   /** Constructor */
-  SuperSliderHandle(SuperSlider *parent = 0);
+  SuperSliderHandle(IntervalSlider *parent = 0);
 
   /** An overloaded mousePressevent so that we can start grabbing the cursor and using it's position for the value */
   void mousePressEvent(QMouseEvent *event);
@@ -80,7 +80,7 @@ public:
   int mapValue();
 
   /** Store the parent as a slider so that you don't have to keep casting it  */
-  SuperSlider *parent;
+  IntervalSlider *parent;
 
   /** Store a bool to determine if the alternate handle has been activated  */
   bool handleActivated;
