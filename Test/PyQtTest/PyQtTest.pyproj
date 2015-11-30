@@ -22,14 +22,21 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ball_tracking%28modified%29.py" />
     <Compile Include="ColorIntervalWidget.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MyIntervalSlider.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ObjectsDetector.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PyQtTest.py" />
     <Compile Include="QtCV.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="StreamReader.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

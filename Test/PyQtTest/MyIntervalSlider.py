@@ -1,4 +1,4 @@
-from enum import Enum
+﻿from enum import Enum
 from PyQt5.QtCore import QDir, QRect, Qt, pyqtSignal
 from PyQt5.QtGui import QMouseEvent, QCursor
 from PyQt5.QtWidgets import QStyle, QStyleFactory, QStyleOptionSlider, QStylePainter

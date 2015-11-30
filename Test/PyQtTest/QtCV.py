@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap, QImage
+﻿from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap, QImage, QColor
 import numpy
 import cv2
 
@@ -37,3 +37,16 @@ def qPixmapToCvMat(qpm) :
     return qImageToCvMat(QImage(qpm))
 
 
+def toRGB(qc) :
+    color = [qc.red(), qc.green(), qc.blue()]
+    return numpy.array(color, dtype = 'uint8')
+
+def toHSV(qc) :
+    color = [qc.hsvHue(), qc.hsvSaturation(), qc.value()]
+    return numpy.array(color, dtype = 'uint8')
+
+def rgbToQColor(rgb) :
+    return QColor(rgb[0], rgb[1], rgb[2])
+
+def hsvToQColor(hsv) :
+    return QColor.fromHsv(hsv[0], hsvToQColor[1], hsvToQColor[2])
