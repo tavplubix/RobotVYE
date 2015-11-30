@@ -176,4 +176,8 @@ class MyIntervalSlider(QAbstractSlider) :
             self.lowerValueChanged.emit(self._options.lowerValue());
             self.valueChanged.emit(self._options.lowerValue());
 
+    def lowerValue(self) :
+        return self._options.lowerValue();
 
+    def upperValue(self) :
+        return self._options.upperValue();

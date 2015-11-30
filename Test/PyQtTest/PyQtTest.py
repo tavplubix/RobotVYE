@@ -1,12 +1,13 @@
 from MyIntervalSlider import MyIntervalSlider
+from ColorIntervalWidget import ColorIntervalWidget
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel
 
 
 app = QApplication(sys.argv)
 window = QMainWindow();
-window.setMinimumWidth(100);
-window.setMinimumHeight(100);
+window.setMinimumWidth(500);
+window.setMinimumHeight(500);
 centralWidget = QWidget(window)
 window.setCentralWidget(centralWidget)
 layout = QVBoxLayout()
@@ -29,6 +30,11 @@ def labelSlot(val) :
     label.setText(s)
 
 slider.valueChanged.connect(labelSlot)
+
+ciw = ColorIntervalWidget()
+layout.addWidget(ciw)
+
+r = ciw.red()
 
 
 window.show()
