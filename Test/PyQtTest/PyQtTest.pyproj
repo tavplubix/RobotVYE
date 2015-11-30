@@ -29,6 +29,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PyQtTest.py" />
+    <Compile Include="QtCV.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="test.jpg" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

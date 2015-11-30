@@ -2,7 +2,8 @@ from MyIntervalSlider import MyIntervalSlider
 from ColorIntervalWidget import ColorIntervalWidget
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel
-
+from QtCV import *
+import cv2
 
 app = QApplication(sys.argv)
 window = QMainWindow();
@@ -35,6 +36,14 @@ ciw = ColorIntervalWidget()
 layout.addWidget(ciw)
 
 r = ciw.red()
+
+frame = cv2.imread("test.jpg")
+qpm = cvMatToQPixmap(frame)
+label.setPixmap(qpm)
+
+cvm = qPixmapToCvMat(qpm)
+cv2.imshow("qpm to cvmat test",cvm);
+k = cv2.waitKey(10)
 
 
 window.show()
