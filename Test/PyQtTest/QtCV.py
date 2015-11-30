@@ -14,8 +14,8 @@ def cvMatToQImage(cvmat) :
 
         elif len(cvmat.shape) == 3:
             if cvmat.shape[2] == 3:
-                #temp = cvmat;
-                temp = cv2.cvtColor(cvmat, cv2.COLOR_BGR2RGB)
+                temp = cvmat;
+                #temp = cv2.cvtColor(cvmat, cv2.COLOR_BGR2RGB)
         qimage = QImage(temp.data, temp.shape[1], temp.shape[0], temp.strides[0], QImage.Format_RGB888);
         return qimage.copy()
     return False;

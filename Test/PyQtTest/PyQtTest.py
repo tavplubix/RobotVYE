@@ -1,6 +1,6 @@
-from MyIntervalSlider import MyIntervalSlider
 from ColorIntervalWidget import ColorIntervalWidget
 import sys
+from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel
 from QtCV import *
 import cv2
@@ -14,36 +14,29 @@ window.setCentralWidget(centralWidget)
 layout = QVBoxLayout()
 centralWidget.setLayout(layout)
 
-slider = MyIntervalSlider()
-slider.setMinimum(0);
-slider.setMaximum(255);
-slider.setLowerValue(42);
-slider.setUpperValue(142);
-layout.addWidget(slider)
-
-label = QLabel()
-layout.addWidget(label)
-
-def labelSlot(val) :
-    lower = slider._options.lowerValue()
-    upper = slider._options.upperValue()
-    s = "Lower value: " + str(lower) + " Upper value: " + str(upper)
-    label.setText(s)
-
-slider.valueChanged.connect(labelSlot)
-
 ciw = ColorIntervalWidget()
 layout.addWidget(ciw)
 
-r = ciw.red()
+label = QLabel('Result')
+layout.addWidget(label)
 
-frame = cv2.imread("test.jpg")
-qpm = cvMatToQPixmap(frame)
-label.setPixmap(qpm)
+cap = cv2.VideoCapture(0)
 
-cvm = qPixmapToCvMat(qpm)
-cv2.imshow("qpm to cvmat test",cvm);
-k = cv2.waitKey(10)
+def mainLoop() :
+    retVal, frame = cap.read();
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    mask = cv2.inRange(frame, ciw.npLower(), ciw.npUpper())
+    result = cv2.bitwise_and(frame, frame, mask = mask)
+    width = centralWidget.width() - 10
+    height = centralWidget.height() - ciw.height() - 10
+    qpm = cvMatToQPixmap(result).scaled(width, height, Qt.KeepAspectRatio)
+    label.setPixmap(qpm)
+    label.setMinimumSize(qpm.size())
+
+timer = QTimer()
+timer.setInterval(100)
+timer.timeout.connect(mainLoop)
+timer.start()
 
 
 window.show()
