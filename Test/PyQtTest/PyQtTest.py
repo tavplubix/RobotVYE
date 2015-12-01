@@ -1,7 +1,8 @@
 ﻿from ColorIntervalWidget import ColorIntervalWidget
 from StreamReader import *
 from ObjectsDetector import *
-from PyQt5.QtCore import QTimer
+from ObjectTracker import *
+from PyQt5.QtCore import QTimer, QPoint
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel
 from QtCV import *
 import cv2
@@ -21,28 +22,43 @@ ciw = ColorIntervalWidget()
 layout.addWidget(ciw)
 
 label = QLabel('Loading...')
+label.setContextMenuPolicy(Qt.CustomContextMenu)
 layout.addWidget(label)
 
 debugInfo = QLabel();
 layout.addWidget(debugInfo)
 
 stream = StreamReader()
+detector = ObjectDetecor()
+tracker = ObjectTracker(0, 0, 0)
+
+
+def click(qpoint) :
+    x = qpoint.x()
+    y = qpoint.y()
+    tracker.setNewPosition(x, y, 50)
+
+label.customContextMenuRequested.connect(click)
 
 def mainLoop() :
     if stream.readable() == False :
         return
     frame = stream.getFrame();
-    obj = ObjectDetecor.findObjects(frame, ciw.qLower(), ciw.qUpper())
+    obj = detector.findObjects(frame, ciw.npLower(), ciw.npUpper())
     debugInfo.setText(str(obj))
+    tracker.processNewPositions(obj)
+    x, y, r = tracker.position();
+    cv2.circle(frame, (int(x), int(y)), int(r), (0, 0, 255), 3)
+
     #mask = cv2.inRange(frame, ciw.npLower(), ciw.npUpper())
     #result = cv2.bitwise_and(frame, frame, mask = mask)
     result = frame
 
-    width = centralWidget.width() - 10
-    height = centralWidget.height() - ciw.height() - 10
-    qpm = cvMatToQPixmap(result).scaled(width, height, Qt.KeepAspectRatio)
+    #width = 800 #centralWidget.width() - 10
+    #height = 600 #centralWidget.height() - ciw.height() - 10
+    qpm = cvMatToQPixmap(result) #cvMatToQPixmap(result).scaled(width, height, Qt.KeepAspectRatio)
     label.setPixmap(qpm)
-    label.setMinimumSize(qpm.size())
+    label.resize(qpm.size())
 
 timer = QTimer()
 timer.setInterval(100)

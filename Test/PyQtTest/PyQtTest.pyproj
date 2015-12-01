@@ -32,6 +32,9 @@
     <Compile Include="ObjectsDetector.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ObjectTracker.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="PyQtTest.py" />
     <Compile Include="QtCV.py">
       <SubType>Code</SubType>
