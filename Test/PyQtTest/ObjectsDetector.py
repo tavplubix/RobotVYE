@@ -27,12 +27,12 @@ class ObjectDetecor :
 
         #find contours in the mask
         contours = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
-        cv2.drawContours(frame, contours, -1, (255,0,0), 1)
+        #cv2.drawContours(frame, contours, -1, (255,0,0), 1)
         objects = list()    #list of found objects
         
         #find largest contours in the mask and centers of this contours
         bigContours = [x for x in contours if cv2.contourArea(x) >= self.minContourArea]
-        cv2.drawContours(frame, bigContours, -1, (0,255,0), 2)
+        #cv2.drawContours(frame, bigContours, -1, (0,255,0), 2)
         for c in bigContours:
             #area = cv2.contourArea(contours[0])
             #c = max(contours, key=cv2.contourArea)

@@ -2,9 +2,10 @@
 from collections import deque
 import numpy as np
 import argparse
-import imutils
+import distance
+#import imutils
 import cv2
- 
+dm=distance.DistanceMeter()
 def nothing(x):
 	pass
 
@@ -29,13 +30,18 @@ cv2.namedWindow("Upper")
 
 #trackbars
 cv2.createTrackbar('H','Lower',0,255,nothing)
+cv2.setTrackbarPos('H', 'Lower', 95)
 cv2.createTrackbar('S','Lower',0,255,nothing)
+cv2.setTrackbarPos('S', 'Lower', 45)
 cv2.createTrackbar('V','Lower',0,255,nothing)
+cv2.setTrackbarPos('V', 'Lower', 19)
 
 cv2.createTrackbar('H','Upper',0,255,nothing)
+cv2.setTrackbarPos('H', 'Upper', 137)
 cv2.createTrackbar('S','Upper',0,255,nothing)
+cv2.setTrackbarPos('S', 'Upper', 255)
 cv2.createTrackbar('V','Upper',0,255,nothing)
-
+cv2.setTrackbarPos('V', 'Upper', 255)
 #origal code
 #greenLower = (29, 86, 6)
 #greenUpper = (64, 255, 255)
@@ -89,8 +95,10 @@ while True:
 
 	# resize the frame, blur it, and convert it to the HSV
 	# color space
-	frame = imutils.resize(frame, width=600)
-	blurred = cv2.GaussianBlur(frame, (11, 11), 0)
+	height, width, channels = frame.shape
+	k=float(width)/600.0
+	frame = cv2.resize(frame, (0, 0), fx=k, fy=k)
+	blurred = cv2.GaussianBlur(frame, (13, 13), 0)
 	hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
  
 	# construct a mask for the color "green", then perform
@@ -117,9 +125,11 @@ while True:
 		center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
  
 		# only proceed if the radius meets a minimum size
-		if radius > 10:
+		if radius > 30:
 			# draw the circle and centroid on the frame,
 			# then update the list of tracked points
+			dist=dm.getDistance(radius)
+			cv2.putText(frame, str(dist), (int(x), int(y)), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255))
 			cv2.circle(frame, (int(x), int(y)), int(radius),
 				(0, 255, 255), 2)
 			cv2.circle(frame, center, 5, (0, 0, 255), -1)
@@ -137,7 +147,7 @@ while True:
 		# otherwise, compute the thickness of the line and
 		# draw the connecting lines
 		thickness = int(np.sqrt(args["buffer"] / float(i + 1)) * 2.5)
-		cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
+		#cv2.line(frame, pts[i - 1], pts[i], (0, 0, 255), thickness)
  
 	# show the frame to our screen
 	cv2.imshow("Frame", frame)

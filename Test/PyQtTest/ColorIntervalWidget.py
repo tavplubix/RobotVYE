@@ -8,7 +8,7 @@ import numpy
 
 class ColorIntervalWidget(QWidget) :
     _components = (0, 1, 2)
-    _componentsDict = {0 : 'Red', 1 : 'Green', 2 : 'Blue'}
+    _componentsDict = {0 : 'Hue', 1 : 'Saturation', 2 : 'Value'}
     _layout = None
     _sliders = list()
     _colorLabels = list()
@@ -26,14 +26,19 @@ class ColorIntervalWidget(QWidget) :
             self._sliders.append(slider)
         universalSlot = lambda n : lambda val: self.__valueChangedSlot(n, val)
         for i in self._components :
+
             slider = self._sliders[i]
             slider.valueChanged.connect(universalSlot(i))
             slider.valueChanged.connect(universalSlot(3))
-            
             slider.setMinimum(0)
-            slider.setMaximum(255)
+            if(i==0):
+                slider.setMaximum(179)
+                slider.setUpperValue(255);
+            else:
+                slider.setMaximum(255)
+                slider.setUpperValue(255);
             slider.setLowerValue(0);
-            slider.setUpperValue(255);
+            
             slider.setOrientation(Qt.Horizontal)
 
             self._sliders.append(slider)
@@ -47,9 +52,12 @@ class ColorIntervalWidget(QWidget) :
 
     def __initializeColorLabels(self) :
         for i in self._components + (3, ) :
+
             label = QLabel('test', self)
             self._colorLabels.append(label)
             self._layout.addWidget(label, i, 2)
+            if(i!=3):
+                label.hide()
         
 
     def __init__(self) :
@@ -118,16 +126,18 @@ class ColorIntervalWidget(QWidget) :
 
     def qLower(self) :
         color = QColor()
-        color.setRed(self._sliders[0].lowerValue())
-        color.setGreen(self._sliders[1].lowerValue())
-        color.setBlue(self._sliders[2].lowerValue())
+        color.setHsv(self._sliders[0].lowerValue(), self._sliders[1].lowerValue(), self._sliders[2].lowerValue())
+        #color.setRed(self._sliders[0].lowerValue())
+        #color.setGreen(self._sliders[1].lowerValue())
+        #color.setBlue(self._sliders[2].lowerValue())
         return color
 
     def qUpper(self) :
         color = QColor()
-        color.setRed(self._sliders[0].upperValue())
-        color.setGreen(self._sliders[1].upperValue())
-        color.setBlue(self._sliders[2].upperValue())
+        color.setHsv(self._sliders[0].upperValue(), self._sliders[1].upperValue(), self._sliders[2].upperValue())
+        #color.setRed(self._sliders[0].upperValue())
+        #color.setGreen(self._sliders[1].upperValue())
+        #color.setBlue(self._sliders[2].upperValue())
         return color
 
     def npLower(self) :
