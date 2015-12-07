@@ -34,11 +34,11 @@ class DistanceMeter:
 							r.remove(r[0])
 							mr=sum(r)/n
 						cv2.circle(cimg, (i[0], i[1]), mr,(0, 255, 0), 2)
-			    		cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)		
+						cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)		
 				cv2.imshow("Camera", cimg)
 				t=cv2.waitKey(10)
 				if t&0xFF==ord('t'):
-					print mr
+					print(mr)
 					cdata.append(mr)
 					break
 		self._a=(dist1-dist2)*cdata[0]*cdata[1]/(cdata[1]-cdata[0])

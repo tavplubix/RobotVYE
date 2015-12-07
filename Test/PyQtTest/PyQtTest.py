@@ -1,12 +1,17 @@
-﻿from ColorIntervalWidget import ColorIntervalWidget
+﻿#Import classes from this project
+from ColorIntervalWidgets import *
 from StreamReader import *
 from ObjectsDetector import *
 from ObjectTracker import *
+from QtCV import *
+#Import standart modules
+import sys
+#Import OpenCV module
+import cv2
+#Import Qt classes
 from PyQt5.QtCore import QTimer, QPoint
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel
-from QtCV import *
-import cv2
-import sys
+
 
 
 app = QApplication(sys.argv)
@@ -18,37 +23,39 @@ window.setCentralWidget(centralWidget)
 layout = QVBoxLayout()
 centralWidget.setLayout(layout)
 
-ciw = ColorIntervalWidget()
+ciw = HSVIntervalWidget(window)
 layout.addWidget(ciw)
 
-label = QLabel('Loading...')
-label.setContextMenuPolicy(Qt.CustomContextMenu)
-layout.addWidget(label)
+imageLabel = QLabel('Loading...')
+layout.addWidget(imageLabel)
 
 debugInfo = QLabel();
 layout.addWidget(debugInfo)
 
 stream = StreamReader()
 detector = ObjectDetecor()
-tracker = ObjectTracker(0, 0, 0)
+tracker = ObjectTracker()
 
-
+#Select object at the position qpoint 
 def click(qpoint) :
     x = qpoint.x()
     y = qpoint.y()
-    tracker.setNewPosition(x, y, 50)
+    tracker.setTrackingObject(x, y, 50)
 
-label.customContextMenuRequested.connect(click)
+#In case of right click on label, call click() (almost hack)
+imageLabel.setContextMenuPolicy(Qt.CustomContextMenu)
+imageLabel.customContextMenuRequested.connect(click)
 
 def mainLoop() :
     if stream.readable() == False :
         return
     frame = stream.getFrame();
-    obj = detector.findObjects(frame, ciw.npLower(), ciw.npUpper())
-    debugInfo.setText(str(obj))
-    tracker.processNewPositions(obj)
-    x, y, r = tracker.position();
-    cv2.circle(frame, (int(x), int(y)), int(r), (0, 0, 255), 3)
+    objects = detector.findObjects(frame, ciw.npLower(), ciw.npUpper())
+    debugInfo.setText(str(objects))
+    tracker.processNewPositions(objects)
+    x, y, r = tracker.objectPosition();
+    if x >= 0 and y >= 0 and r >= 0 :
+        cv2.circle(frame, (int(x), int(y)), int(r), (0, 0, 255), 3)
 
     #mask = cv2.inRange(frame, ciw.npLower(), ciw.npUpper())
     #result = cv2.bitwise_and(frame, frame, mask = mask)
@@ -57,9 +64,10 @@ def mainLoop() :
     #width = 800 #centralWidget.width() - 10
     #height = 600 #centralWidget.height() - ciw.height() - 10
     qpm = cvMatToQPixmap(result) #cvMatToQPixmap(result).scaled(width, height, Qt.KeepAspectRatio)
-    label.setPixmap(qpm)
-    label.resize(qpm.size())
+    imageLabel.setPixmap(qpm)
+    imageLabel.resize(qpm.size())
 
+#This timer calls mainLoop() every 100 ms
 timer = QTimer()
 timer.setInterval(100)
 timer.timeout.connect(mainLoop)
@@ -67,4 +75,6 @@ timer.start()
 
 
 window.show()
+
+#Enter in main Qt event loop
 app.exec();
