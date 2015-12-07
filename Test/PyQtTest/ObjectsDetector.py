@@ -4,11 +4,9 @@ import cv2
 
 
 class ObjectDetecor :
-    #stream = None
-    #def __init__(self, stream) :
-        #self.stream = stream
-    minRadius = 15;
-    minContourArea = 500;
+    def __init__(self) :
+        self.minRadius = 15;
+        self.minContourArea = 500;
 
     def findObjects(self, frame, npLower, npUpper) :
         #convert image and colors to HSV
@@ -32,7 +30,7 @@ class ObjectDetecor :
         
         #find largest contours in the mask and centers of this contours
         bigContours = [x for x in contours if cv2.contourArea(x) >= self.minContourArea]
-        #cv2.drawContours(frame, bigContours, -1, (0,255,0), 2)
+        cv2.drawContours(frame, bigContours, -1, (0,255,0), 2)
         for c in bigContours:
             #area = cv2.contourArea(contours[0])
             #c = max(contours, key=cv2.contourArea)

@@ -18,6 +18,8 @@ class HSVIntervalWidget(AbstractColorIntervalWidget) :
         super(HSVIntervalWidget, self).__init__(parent)
 
     def _valueChangedSlot(self, i, val) :
+        #if i != 3 :
+        #    self._AbstractColorIntervalWidget__colorLabels[i].hide()
         lowerColor = self.qLower()
         upperColor = self.qUpper()
         lowerValue = upperValue = 0
@@ -56,6 +58,7 @@ class HSVIntervalWidget(AbstractColorIntervalWidget) :
         color = QColor()
         color.setHsv(self.component(0)[1] * 2 + 1, self.component(1)[1], self.component(2)[1])
         return color
+
 
     
 

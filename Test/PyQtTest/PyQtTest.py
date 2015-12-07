@@ -1,16 +1,17 @@
-﻿#Import classes from this project
+﻿#Import standart modules
+import sys
+#Import classes from this project
+sys.path.append('./GUI')
 from ColorIntervalWidgets import *
 from StreamReader import *
 from ObjectsDetector import *
 from ObjectTracker import *
 from QtCV import *
-#Import standart modules
-import sys
 #Import OpenCV module
 import cv2
 #Import Qt classes
 from PyQt5.QtCore import QTimer, QPoint
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget, QLabel, QComboBox
 
 
 
@@ -20,26 +21,48 @@ window.setMinimumWidth(900);
 window.setMinimumHeight(750);
 centralWidget = QWidget(window)
 window.setCentralWidget(centralWidget)
-layout = QVBoxLayout()
+layout = QGridLayout()
 centralWidget.setLayout(layout)
+
+colorspaceComboBox = QComboBox(window)
+colorspaceComboBox.addItems(['HSV', 'RGB'])
+layout.addWidget(colorspaceComboBox)
 
 ciw = HSVIntervalWidget(window)
 layout.addWidget(ciw)
 
+def changeColorspace(s) :
+    global ciw
+    global layout
+    #layout.removeWidget(ciw)
+    ciw.destroy()
+    del ciw
+    
+    if s == 0 :
+        ciw = HSVIntervalWidget(window)
+    elif s == 1 :
+        ciw = RGBIntervalWidget(window)
+    else :
+        print('WARNING: changeColorspace()')
+    layout.addWidget(ciw, 1, 0)
+    #layout.replaceWidget(ciw, imageLabel)
+colorspaceComboBox.activated.connect(changeColorspace)
+
 imageLabel = QLabel('Loading...')
 layout.addWidget(imageLabel)
 
-debugInfo = QLabel();
-layout.addWidget(debugInfo)
+#debugInfo = QLabel();
+#layout.addWidget(debugInfo)
 
 stream = StreamReader()
 detector = ObjectDetecor()
 tracker = ObjectTracker()
 
+zoom = 1
 #Select object at the position qpoint 
 def click(qpoint) :
-    x = qpoint.x()
-    y = qpoint.y()
+    x = int(qpoint.x() / zoom)
+    y = int(qpoint.y() / zoom)
     tracker.setTrackingObject(x, y, 50)
 
 #In case of right click on label, call click() (almost hack)
@@ -51,20 +74,24 @@ def mainLoop() :
         return
     frame = stream.getFrame();
     objects = detector.findObjects(frame, ciw.npLower(), ciw.npUpper())
-    debugInfo.setText(str(objects))
+    #debugInfo.setText(str(objects))
     tracker.processNewPositions(objects)
     x, y, r = tracker.objectPosition();
     if x >= 0 and y >= 0 and r >= 0 :
         cv2.circle(frame, (int(x), int(y)), int(r), (0, 0, 255), 3)
-
-    #mask = cv2.inRange(frame, ciw.npLower(), ciw.npUpper())
-    #result = cv2.bitwise_and(frame, frame, mask = mask)
-    result = frame
-
-    #width = 800 #centralWidget.width() - 10
-    #height = 600 #centralWidget.height() - ciw.height() - 10
-    qpm = cvMatToQPixmap(result) #cvMatToQPixmap(result).scaled(width, height, Qt.KeepAspectRatio)
-    imageLabel.setPixmap(qpm)
+    
+    
+    qpm = cvMatToQPixmap(frame) #cvMatToQPixmap(result).scaled(width, height, Qt.KeepAspectRatio)
+    
+    #Scale image
+    width = centralWidget.width() - 10
+    height = centralWidget.height() - ciw.height() - 10
+    wZoom = float(width) / float(qpm.width())
+    hZoom = float(height) / float(qpm.height())
+    global zoom
+    zoom = min(wZoom, hZoom)
+    
+    imageLabel.setPixmap(qpm.scaled(qpm.width() * zoom, qpm.height() * zoom, Qt.KeepAspectRatio))
     imageLabel.resize(qpm.size())
 
 #This timer calls mainLoop() every 100 ms

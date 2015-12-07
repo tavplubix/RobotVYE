@@ -11,14 +11,14 @@ class Move (Enum) :
 
 
 class ObjectTracker :
-    lastX = None
-    lastY = None
-    lastR = None
-    epsilon = 80
-    r_epsilon = 250
-    moveTo = Move.No
 
     def __init__(self, x = None, y = None, r = None) :
+        self.lastX = None
+        self.lastY = None
+        self.lastR = None
+        self.epsilon = 80
+        self.r_epsilon = 250
+        self.moveTo = Move.No
         self.setTrackingObject(x, y, r)
 
     def objectPosition(self) :
