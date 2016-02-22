@@ -1,5 +1,5 @@
 from enum import Enum
-#from math import abs
+import cv2
 
 class Move (Enum) :
     No = 0
@@ -11,7 +11,7 @@ class Move (Enum) :
     Back = 32
 
 
-class ObjectTracker :
+class SimpleObjectTracker :
     lastX = None
     lastY = None
     lastR = None
@@ -40,7 +40,8 @@ class ObjectTracker :
                 continue
             #if abs(r - self.lastR) > self.r_epsilon :
                 #continue
-            #WARNING может работать неправильно, если рядом будет другой объект
+            #WARNING ????? ???????? ???????????, ???? ????? ????? ?????? ??????
+            moveTo = Move.No
             if self.lastX < x :
                 self.moveTo = self.moveTo or Move.Right
             elif x < self.lastX :

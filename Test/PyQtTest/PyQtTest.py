@@ -2,6 +2,7 @@
 from StreamReader import *
 from ObjectsDetector import *
 from ObjectTracker import *
+from ImageWidget import *
 from PyQt5.QtCore import QTimer, QPoint
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel
 from QtCV import *
@@ -21,16 +22,19 @@ centralWidget.setLayout(layout)
 ciw = ColorIntervalWidget()
 layout.addWidget(ciw)
 
+#imagew = ImageWidget(window)
+#layout.addWidget(imagew)
 label = QLabel('Loading...')
-label.setContextMenuPolicy(Qt.CustomContextMenu)
 layout.addWidget(label)
+label.setContextMenuPolicy(Qt.CustomContextMenu)
 
 debugInfo = QLabel();
 layout.addWidget(debugInfo)
 
 stream = StreamReader()
+stream.connect()
 detector = ObjectDetecor()
-tracker = ObjectTracker(0, 0, 0)
+tracker = SimpleObjectTracker(0, 0, 0)
 
 
 def click(qpoint) :
@@ -50,6 +54,8 @@ def mainLoop() :
     x, y, r = tracker.position();
     cv2.circle(frame, (int(x), int(y)), int(r), (0, 0, 255), 3)
 
+    #imagew.setCvImage(frame)
+
     #mask = cv2.inRange(frame, ciw.npLower(), ciw.npUpper())
     #result = cv2.bitwise_and(frame, frame, mask = mask)
     result = frame
@@ -68,3 +74,4 @@ timer.start()
 
 window.show()
 app.exec();
+stream.close()

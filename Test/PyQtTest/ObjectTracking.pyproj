@@ -4,13 +4,13 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>ecf46f49-c6e5-4881-b20f-526e03413c3b</ProjectGuid>
-    <ProjectHome>.</ProjectHome>
+    <ProjectHome>
+    </ProjectHome>
     <StartupFile>PyQtTest.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <SearchPath>..\RaspberryVideoServer\</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
-    <Name>PyQtTest</Name>
+    <Name>ObjectTracking</Name>
     <RootNamespace>PyQtTest</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -26,6 +26,9 @@
     <Compile Include="ColorIntervalWidget.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ImageWidget.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="MyIntervalSlider.py">
       <SubType>Code</SubType>
     </Compile>
@@ -33,6 +36,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ObjectTracker.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SimpleObjectTracker.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PyQtTest.py" />

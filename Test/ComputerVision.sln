@@ -5,7 +5,9 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "PyQtTest", "PyQtTest\PyQtTest.pyproj", "{ECF46F49-C6E5-4881-B20F-526E03413C3B}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ObjectTracking", "PyQtTest\ObjectTracking.pyproj", "{ECF46F49-C6E5-4881-B20F-526E03413C3B}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "RaspberryVideoServer", "RaspberryVideoServer\RaspberryVideoServer.pyproj", "{1CF3CAD3-3B9C-41A1-8088-7CECB3DF7A25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,14 @@ Global
 		{ECF46F49-C6E5-4881-B20F-526E03413C3B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{ECF46F49-C6E5-4881-B20F-526E03413C3B}.Release|Win32.ActiveCfg = Release|Any CPU
 		{ECF46F49-C6E5-4881-B20F-526E03413C3B}.Release|x64.ActiveCfg = Release|Any CPU
+		{1CF3CAD3-3B9C-41A1-8088-7CECB3DF7A25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF3CAD3-3B9C-41A1-8088-7CECB3DF7A25}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1CF3CAD3-3B9C-41A1-8088-7CECB3DF7A25}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{1CF3CAD3-3B9C-41A1-8088-7CECB3DF7A25}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1CF3CAD3-3B9C-41A1-8088-7CECB3DF7A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF3CAD3-3B9C-41A1-8088-7CECB3DF7A25}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1CF3CAD3-3B9C-41A1-8088-7CECB3DF7A25}.Release|Win32.ActiveCfg = Release|Any CPU
+		{1CF3CAD3-3B9C-41A1-8088-7CECB3DF7A25}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
