@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QErrorMessage
 #from pickle import loads
 from Socket import Socket
 
-class CannotReadFrame :
+class CannotReadFrame(BaseException) :
     pass
 
 class StreamReader :
@@ -27,7 +27,11 @@ class StreamReader :
         qem = QErrorMessage()
         qem.showMessage('Не удаётся подключиться к Raspberry Pi: Будет подключена локальная камера')
         qem.exec()
-        self.__capturedDevice = cv2.VideoCapture(0)    
+        self._capturedDevice = cv2.VideoCapture(0)    
+
+    def releseLocalCamera(self) :
+        self._capturedDevice.relese()
+        self._capturedDevice = None
 
     def __del__(self) :
         self.close()
@@ -43,21 +47,20 @@ class StreamReader :
             try: 
                 return self._getFrameFromLocalCamera() 
             except: 
-            raise CannotReadFrame
+                raise CannotReadFrame
+        raise CannotReadFrame
 
 
     def _getFrameFromRemoteCamera(self) :
         self._server.sendObject('get_frame')
         frame = self._server.recvObject()
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        return frame
+        return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     def _getFrameFromLocalCamera(self) :
         retVal, frame = self._capturedDevice.read()
         if retVal == False :
             raise CannotReadFrame
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        return frame#cv2.resize(frame, (0, 0), fx = 1.6, fy = 1.6)
+        return cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     def readable(self) :
         #заглушка

@@ -1,6 +1,8 @@
 import os.path
 import cv2
 import numpy as np
+
+
 class DistanceMeter:
 	def __init__(self, filename='distance.dat'):
 		self._a=0
@@ -10,6 +12,7 @@ class DistanceMeter:
 			with open(filename, 'r') as f:
 				self._a=float(f.readline())
 				self._b=float(f.readline())
+
 	def train(self, dist1=15.0, dist2=30.0):
 		cap=cv2.VideoCapture(0)
 		cdata=[]
@@ -49,6 +52,8 @@ class DistanceMeter:
 			f.write(str(self._b))
 		cap.release()
 		cv2.destroyAllWindows()
+
+
 	def getDistance(self, size):
 		if (self._a!=0)and(self._b!=0):
 			return self._a/float(size)+self._b

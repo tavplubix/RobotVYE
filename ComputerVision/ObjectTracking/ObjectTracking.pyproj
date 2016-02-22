@@ -22,9 +22,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="distance.py" />
+    <Compile Include="DistanceMeter.py" />
     <Compile Include="GUI\AbstractColorIntervalWidget.py" />
     <Compile Include="GUI\ColorIntervalWidgets.py" />
+    <Compile Include="GUI\ImageWidget.py" />
     <Compile Include="GUI\MyIntervalSlider.py" />
     <Compile Include="ObjectsDetector.py">
       <SubType>Code</SubType>

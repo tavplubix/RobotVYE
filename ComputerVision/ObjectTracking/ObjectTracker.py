@@ -26,7 +26,7 @@ class SimpleObjectTracker :
         if self.lastX is None or self.lastY is None or self.lastR is None :
             return (0, 0, 0)
         else :
-        return ( self.lastX, self.lastY, self.lastR )
+            return ( self.lastX, self.lastY, self.lastR )
 
     def setTrackingObject(self, x = None, y = None, r = None) :
         self.lastX = x

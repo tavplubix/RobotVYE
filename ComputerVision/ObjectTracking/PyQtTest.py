@@ -7,7 +7,7 @@ from StreamReader import *
 from ObjectsDetector import *
 from SimpleObjectTracker import *
 from ImageWidget import *
-from QtCV import *
+import QtCV
 #Import OpenCV module
 import cv2
 #Import Qt classes
@@ -80,14 +80,14 @@ def mainLoop() :
     tracker.processNewPositions(objects)
     x, y, r = tracker.objectPosition();
     if x >= 0 and y >= 0 and r >= 0 :
-    cv2.circle(frame, (int(x), int(y)), int(r), (0, 0, 255), 3)
+        cv2.circle(frame, (int(x), int(y)), int(r), (0, 0, 255), 3)
 
     #imagew.setCvImage(frame)
 
     #mask = cv2.inRange(frame, ciw.npLower(), ciw.npUpper())
     #result = cv2.bitwise_and(frame, frame, mask = mask)
     result = frame
-
+    qpm = QtCV.cvMatToQPixmap(frame)
     imageLabel.setPixmap(qpm.scaled(qpm.width() * zoom, qpm.height() * zoom, Qt.KeepAspectRatio))
     imageLabel.resize(qpm.size())
 
