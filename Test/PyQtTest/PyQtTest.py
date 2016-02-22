@@ -1,13 +1,19 @@
-﻿from ColorIntervalWidget import ColorIntervalWidget
+﻿#Import standart modules
+import sys
+#Import classes from this project
+sys.path.append('./GUI')
+from ColorIntervalWidgets import *
 from StreamReader import *
 from ObjectsDetector import *
-from ObjectTracker import *
+from SimpleObjectTracker import *
 from ImageWidget import *
-from PyQt5.QtCore import QTimer, QPoint
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel
 from QtCV import *
+#Import OpenCV module
 import cv2
-import sys
+#Import Qt classes
+from PyQt5.QtCore import QTimer, QPoint
+from PyQt5.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget, QLabel, QComboBox
+
 
 
 app = QApplication(sys.argv)
@@ -16,42 +22,64 @@ window.setMinimumWidth(900);
 window.setMinimumHeight(750);
 centralWidget = QWidget(window)
 window.setCentralWidget(centralWidget)
-layout = QVBoxLayout()
+layout = QGridLayout()
 centralWidget.setLayout(layout)
 
-ciw = ColorIntervalWidget()
+colorspaceComboBox = QComboBox(window)
+colorspaceComboBox.addItems(['HSV', 'RGB'])
+layout.addWidget(colorspaceComboBox)
+
+ciw = HSVIntervalWidget(window)
 layout.addWidget(ciw)
 
-#imagew = ImageWidget(window)
-#layout.addWidget(imagew)
-label = QLabel('Loading...')
-layout.addWidget(label)
-label.setContextMenuPolicy(Qt.CustomContextMenu)
+def changeColorspace(s) :
+    global ciw
+    global layout
+    #layout.removeWidget(ciw)
+    ciw.destroy()
+    del ciw
+    
+    if s == 0 :
+        ciw = HSVIntervalWidget(window)
+    elif s == 1 :
+        ciw = RGBIntervalWidget(window)
+    else :
+        print('WARNING: changeColorspace()')
+    layout.addWidget(ciw, 1, 0)
+    #layout.replaceWidget(ciw, imageLabel)
+colorspaceComboBox.activated.connect(changeColorspace)
 
-debugInfo = QLabel();
-layout.addWidget(debugInfo)
+imageLabel = QLabel('Loading...')
+layout.addWidget(imageLabel)
+
+#debugInfo = QLabel();
+#layout.addWidget(debugInfo)
 
 stream = StreamReader()
 stream.connect()
 detector = ObjectDetecor()
 tracker = SimpleObjectTracker(0, 0, 0)
 
-
+zoom = 1
+#Select object at the position qpoint 
 def click(qpoint) :
-    x = qpoint.x()
-    y = qpoint.y()
-    tracker.setNewPosition(x, y, 50)
+    x = int(qpoint.x() / zoom)
+    y = int(qpoint.y() / zoom)
+    tracker.setTrackingObject(x, y, 50)
 
-label.customContextMenuRequested.connect(click)
+#In case of right click on label, call click() (almost hack)
+imageLabel.setContextMenuPolicy(Qt.CustomContextMenu)
+imageLabel.customContextMenuRequested.connect(click)
 
 def mainLoop() :
     if stream.readable() == False :
         return
     frame = stream.getFrame();
-    obj = detector.findObjects(frame, ciw.npLower(), ciw.npUpper())
-    debugInfo.setText(str(obj))
-    tracker.processNewPositions(obj)
-    x, y, r = tracker.position();
+    objects = detector.findObjects(frame, ciw.npLower(), ciw.npUpper())
+    #debugInfo.setText(str(objects))
+    tracker.processNewPositions(objects)
+    x, y, r = tracker.objectPosition();
+    if x >= 0 and y >= 0 and r >= 0 :
     cv2.circle(frame, (int(x), int(y)), int(r), (0, 0, 255), 3)
 
     #imagew.setCvImage(frame)
@@ -60,12 +88,10 @@ def mainLoop() :
     #result = cv2.bitwise_and(frame, frame, mask = mask)
     result = frame
 
-    #width = 800 #centralWidget.width() - 10
-    #height = 600 #centralWidget.height() - ciw.height() - 10
-    qpm = cvMatToQPixmap(result) #cvMatToQPixmap(result).scaled(width, height, Qt.KeepAspectRatio)
-    label.setPixmap(qpm)
-    label.resize(qpm.size())
+    imageLabel.setPixmap(qpm.scaled(qpm.width() * zoom, qpm.height() * zoom, Qt.KeepAspectRatio))
+    imageLabel.resize(qpm.size())
 
+#This timer calls mainLoop() every 100 ms
 timer = QTimer()
 timer.setInterval(100)
 timer.timeout.connect(mainLoop)
@@ -73,5 +99,7 @@ timer.start()
 
 
 window.show()
+
+#Enter in main Qt event loop
 app.exec();
 stream.close()

@@ -27,7 +27,7 @@ class StreamReader :
         qem = QErrorMessage()
         qem.showMessage('Не удаётся подключиться к Raspberry Pi: Будет подключена локальная камера')
         qem.exec()
-        self._capturedDevice = cv2.VideoCapture(0) 
+        self.__capturedDevice = cv2.VideoCapture(0)    
 
     def __del__(self) :
         self.close()
@@ -43,7 +43,7 @@ class StreamReader :
             try: 
                 return self._getFrameFromLocalCamera() 
             except: 
-                raise CannotReadFrame
+            raise CannotReadFrame
 
 
     def _getFrameFromRemoteCamera(self) :
@@ -86,5 +86,5 @@ class StreamReader :
             finally:
                 self._server = None
 
-    
+
 

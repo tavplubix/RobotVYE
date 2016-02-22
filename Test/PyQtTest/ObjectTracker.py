@@ -1,4 +1,4 @@
-from enum import Enum
+﻿from enum import Enum
 import cv2
 
 class Move (Enum) :
@@ -12,27 +12,35 @@ class Move (Enum) :
 
 
 class SimpleObjectTracker :
-    lastX = None
-    lastY = None
-    lastR = None
-    epsilon = 80
-    r_epsilon = 250
-    moveTo = Move.No
 
-    def __init__(self, x, y, r) :
-        self.setNewPosition(x, y, r)
+    def __init__(self, x = None, y = None, r = None) :
+        self.lastX = None
+        self.lastY = None
+        self.lastR = None
+        self.epsilon = 80
+        self.r_epsilon = 250
+        self.moveTo = Move.No
+        self.setTrackingObject(x, y, r)
 
-    def position(self) :
+    def objectPosition(self) :
+        if self.lastX is None or self.lastY is None or self.lastR is None :
+            return (0, 0, 0)
+        else :
         return ( self.lastX, self.lastY, self.lastR )
 
-    def setNewPosition(self, x, y, r = None) :
+    def setTrackingObject(self, x = None, y = None, r = None) :
         self.lastX = x
         self.lastY = y
-        if r is None :
-            return
         self.lastR = r
 
     def processNewPositions(self, objects) :
+        if self.lastX is None or self.lastY is None or self.lastR is None :
+            #if there is only one object - track it
+            if len(objects) == 1 :
+                self.setTrackingObject(objects[0][0], objects[0][1], objects[0][2])
+            return 
+
+        found = False
         for x,y,r in objects :
             if abs(x - self.lastX) > self.epsilon :
                 continue
@@ -40,8 +48,7 @@ class SimpleObjectTracker :
                 continue
             #if abs(r - self.lastR) > self.r_epsilon :
                 #continue
-            #WARNING ????? ???????? ???????????, ???? ????? ????? ?????? ??????
-            moveTo = Move.No
+            self.moveTo = Move.No
             if self.lastX < x :
                 self.moveTo = self.moveTo or Move.Right
             elif x < self.lastX :
@@ -57,8 +64,12 @@ class SimpleObjectTracker :
             elif r < self.lastR :
                 self.moveTo = self.moveTo or Move.Back
 
-            self.setNewPosition(x, y, r)
+            found = True
+            self.setTrackingObject(x, y, r)
 
+        #if object is lost - disable tracking
+        if not found :
+            self.setTrackingObject(None, None, None)
 
 
 

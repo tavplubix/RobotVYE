@@ -22,16 +22,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ball_tracking%28modified%29.py" />
-    <Compile Include="ColorIntervalWidget.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ImageWidget.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MyIntervalSlider.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="distance.py" />
+    <Compile Include="GUI\AbstractColorIntervalWidget.py" />
+    <Compile Include="GUI\ColorIntervalWidgets.py" />
+    <Compile Include="GUI\MyIntervalSlider.py" />
     <Compile Include="ObjectsDetector.py">
       <SubType>Code</SubType>
     </Compile>
@@ -48,6 +42,9 @@
     <Compile Include="StreamReader.py">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GUI\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
